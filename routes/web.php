@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserDashboardController;
 use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\Admin\ProductController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -40,27 +41,25 @@ Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])
     ->name('admin.dashboard');
 
 // ===============================
-// ADMIN MENU TAMBAHAN
+// ADMIN AREA (CRUD + Pages)
 // ===============================
 Route::middleware(['auth'])->prefix('admin')->group(function () {
 
-    // Halaman Produk
-    Route::get('/products', function () {
-        return view('dashboard.admin.products');
-    })->name('admin.products');
+    // CRUD Produk
+    Route::resource('/products', ProductController::class);
 
-    // Halaman Pesanan
+    // Halaman Pesanan (static dulu)
     Route::get('/orders', function () {
         return view('dashboard.admin.orders');
     })->name('admin.orders');
 
-    // Halaman User
+    // Halaman User (static dulu)
     Route::get('/users', function () {
         return view('dashboard.admin.users');
     })->name('admin.users');
 });
 
-// Logout (POST)
+// Logout
 Route::post('/logout', function () {
     auth()->logout();
     return redirect('/');
